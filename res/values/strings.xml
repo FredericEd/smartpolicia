@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">U-Control Policía</string>
+
+    <string name="save">Guardar</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="si">Sí</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancelar</string>
+    <string name="contact">Contactar</string>
+    <string name="back">Retornar</string>
+    <string name="update">Actualizar</string>
+
+    <string name="error_general">Ha ocurrido un error inesperado.</string>
+    <string name="error_location">Ha ocurrido un error al obtener su ubicación. Asegúrese de haber activado la geolocalización.</string>
+    <string name="error_field_required">Este campo es requerido</string>
+    <string name="error_fields_required">Debe llenar todos los campos.</string>
+    <string name="error_invalid_email">El correo no es válido</string>
+    <string name="error_internet">Necesita una conexión a internet para acceder a esta funcionalidad.</string>
+    <string name="error_internet2">No se dectectó conexión a internet. Inténtelo de nuevo.</string>
+    <string name="error_image_required">Debe subir una imagen.</string>
+    <string name="error_permissions">No autorizó los permisos.</string>
+    <string name="error_heavy">El archivo seleccionado es demasiado pesado.</string>
+
+    <string name="menu_logout">Cerrar sesión</string>
+    <string name="hint_email">Correo</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="hint_phone">Teléfono celular</string>
+    <string name="hint_nacimiento">Fecha de nacimiento</string>
+    <string name="hint_detalles">Detalles de la alarma</string>
+
+    <string name="auth_button_login">Iniciar sesión</string>
+    <string name="auth_button_foto">Iniciar sesión con foto</string>
+    <string name="auth_button_picture">Tomar foto</string>
+
+    <string name="consulta_label_title">Nueva consulta</string>
+    <string name="consulta_label_header">Elija el método para escoger la imagen para la consulta. Asegúrese de mostrar el rostro de forma clara.</string>
+    <string name="consulta_message_usuario_added">Contacto agregado exitosamente</string>
+    <string name="consulta_message_usuario_required">Debe agregar al menos un contacto</string>
+    <string name="profile_button_record">Ver record policial</string>
+    <string name="profile_label_edad">años</string>
+    <string name="profile_label_tipo">Tipo</string>
+    <string name="profile_label_observacion">Observacion</string>
+
+    <string name="alarma_label_title">Alarmas disponibles</string>
+    <string name="alarma_button_aceptar">Responder</string>
+    <string name="alarma_message_aceptar">¿Desea responder a esta alarma?</string>
+    <string name="alarma_message_finalizar">¿Desea finalizar la alarma?</string>
+    <string name="alarma_label_detalla">Detalle:</string>
+    <string name="alarma_label_fecha">Fecha:</string>
+    <string name="alarma_label_estado">Estado:</string>
+    <string name="alarma_label_title_lista">Alarmas procesadas</string>
+    <string name="alarma_label_empty">Aún no ha procesado ninguna alarma.</string>
+
+    <string name="unknown_location">La ubicación no pudo obtenerse.</string>
+    <string name="channel_name">ulocation</string>
+    <string name="channel_description" >U-Control\'s default notification channel</string>
+    <string name="persistent_notification">U-Control está guardando su ubicación.</string>
+    <string name="default_notification_channel_id" translatable="false">ucontrol_default_channel</string>
+    <plurals name="num_locations_reported">
+        <item quantity="zero">No location reported</item>
+        <item quantity="one">One location reported</item>
+        <item quantity="other">%d locations reported</item>
+    </plurals>
+</resources>
