@@ -56,7 +56,7 @@ class AlarmaHolder(val UIObserver: AlarmasUIObserver, val view: View): RecyclerV
         val usuario = Klaxon().parseFromJsonObject<User>(alarma.obj("usuario")!!)!!
         textNombre.text = "${usuario.nombre1} ${usuario.apellido1} ${usuario.apellido2}"
         textFecha.text = alarma.string("fecha")
-        textEstado.text = if (alarma.string("detalle") == "") "En curso" else "Finalizado"
+        textEstado.text = if (alarma.string("detalle").isNullOrBlank()) "En curso" else "Finalizado"
         if (usuario.imagen.isNotEmpty())
             Picasso.get().load(Utils.URL_MEDIA + usuario.imagen).error(R.drawable.men).placeholder(R.drawable.men).noFade().into(imgIcon)
         view.setOnClickListener{

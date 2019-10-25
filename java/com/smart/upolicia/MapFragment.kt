@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.android.volley.DefaultRetryPolicy
-import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -34,13 +33,11 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import com.smart.hero.AlarmaFinalizarFragment
-import com.smart.hero.ConsultaFragment
 import com.smart.upolicia.Utils.InfoWindowAlarma
+import com.smart.upolicia.Utils.InfoWindowUser
 import com.smart.upolicia.Utils.NetworkUtils
 import com.smart.upolicia.Utils.Utils
-import kotlinx.android.synthetic.main.fragment_picker.contentView
-import kotlinx.android.synthetic.main.fragment_picker.progressView
+import kotlinx.android.synthetic.main.fragment_map.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -70,10 +67,10 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         prefs = PreferenceManager.getDefaultSharedPreferences(activity!!.applicationContext)
         currentLoc = LatLng(prefs.getString("latitud", "")!!.toDouble(), prefs.getString("longitud", "")!!.toDouble())
-        activity!!.setTitle(R.string.alarma_label_title)
+        activity!!.setTitle(R.string.alarma_label_title2)//.alarma_label_title)
 
         if (mapFragment == null) {
-            mapFragment = SupportMapFragment.newInstance();
+            mapFragment = SupportMapFragment.newInstance()
         }
         childFragmentManager.beginTransaction().replace(R.id.map, mapFragment as Fragment).commit()
         mapFragment!!.getMapAsync(this)
@@ -102,7 +99,10 @@ class MapFragment: Fragment(), OnMapReadyCallback {
                             CameraUpdateFactory.newLatLngZoom(currentLoc, DEFAULT_ZOOM)
                         )
                         mMap.addMarker(MarkerOptions().position(LatLng(mLastKnownLocation.latitude, mLastKnownLocation.longitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.policia)))
-                        loadAlarmas()
+                        loadUsers()
+                        reloadButton.setOnClickListener{
+                            loadUsers()
+                        }
                     } else {
                         Log.d("ERROR", "Current location is null. Using defaults.")
                     }
@@ -147,10 +147,11 @@ class MapFragment: Fragment(), OnMapReadyCallback {
                 MarkerOptions().position(
                     LatLng(alarmasArray[i].string("latitud")!!.toDouble(),
                         alarmasArray[i].string("longitud")!!.toDouble())
-                ))
+                ).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user)))
             marker.tag = i
         }
-        mMap.setInfoWindowAdapter(InfoWindowAlarma(this@MapFragment.context!!, JSONArray(alarmasArray.toJsonString())))
+        mMap.setInfoWindowAdapter(InfoWindowUser(this@MapFragment.context!!, JSONArray(alarmasArray.toJsonString())))
+        /*mMap.setInfoWindowAdapter(InfoWindowAlarma(this@MapFragment.context!!, JSONArray(alarmasArray.toJsonString())))
         mMap.setOnInfoWindowClickListener {
             try {
                 if (alarmasArray.size > (it.tag as Int)) {
@@ -170,6 +171,59 @@ class MapFragment: Fragment(), OnMapReadyCallback {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }*/
+    }
+
+    private fun loadUsers(){
+        if (!NetworkUtils.isConnected(context!!)) {
+            Toast.makeText(activity, R.string.error_internet2, Toast.LENGTH_LONG).show()
+        } else {
+            progressView.visibility = View.VISIBLE
+            contentView.visibility = View.GONE
+            reloadButton.hide()
+            val queue = Volley.newRequestQueue(activity)
+            var URL = "${Utils.URL_SERVER}/policias/usuarios"
+            val stringRequest = object : StringRequest(Method.POST, URL, Response.Listener<String> { response ->
+                if (isAdded) {
+                    try {
+                        progressView.visibility = View.GONE
+                        contentView.visibility = View.VISIBLE
+                        reloadButton.show()
+                        val json: JsonObject = Parser.default().parse(StringBuilder(response)) as JsonObject
+                        alarmasArray = json.array<JsonObject>("usuario_location")!!
+                        setMarkersOnMap()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(activity, resources.getString(R.string.error_general), Toast.LENGTH_LONG).show()
+                    }
+                }
+            }, Response.ErrorListener { error ->
+                if (isAdded) {
+                    try {
+                        error.printStackTrace()
+                        progressView.visibility = View.GONE
+                        contentView.visibility = View.VISIBLE
+                        reloadButton.show()
+                        Toast.makeText(activity, JSONObject(String(error.networkResponse.data)).getString("message"), Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(activity, resources.getString(R.string.error_general), Toast.LENGTH_LONG).show()
+                    }
+                }
+            }) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers.put("token", prefs.getString("api_key", "")!!)
+                    return headers
+                }
+                override fun getParams(): MutableMap<String, String> {
+                    val parameters = HashMap<String, String>()
+                    parameters["latitud"] = currentLoc.latitude.toString()
+                    parameters["longitud"] = currentLoc.longitude.toString()
+                    return parameters
+                }
+            }
+            stringRequest.retryPolicy = DefaultRetryPolicy(180000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+            queue.add(stringRequest)
         }
     }
 
@@ -179,16 +233,18 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         } else {
             progressView.visibility = View.VISIBLE
             contentView.visibility = View.GONE
+            reloadButton.hide()
             val queue = Volley.newRequestQueue(activity)
             var URL = "${Utils.URL_SERVER}/alarmas/search"
-            val stringRequest = object : StringRequest(Request.Method.POST, URL, Response.Listener<String> { response ->
+            val stringRequest = object : StringRequest(Method.POST, URL, Response.Listener<String> { response ->
                 if (isAdded) {
                     try {
                         progressView.visibility = View.GONE
                         contentView.visibility = View.VISIBLE
+                        reloadButton.show()
                         val json: JsonObject = Parser.default().parse(StringBuilder(response)) as JsonObject
                         alarmasArray = json.array<JsonObject>("alarmas")!!
-                        setMarkersOnMap()
+                        if (alarmasArray.size > 0) setMarkersOnMap()
                     } catch (e: Exception) {
                         e.printStackTrace()
                         Toast.makeText(activity, resources.getString(R.string.error_general), Toast.LENGTH_LONG).show()
@@ -200,6 +256,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
                     error.printStackTrace()
                     progressView.visibility = View.GONE
                     contentView.visibility = View.VISIBLE
+                    reloadButton.show()
                     Toast.makeText(activity, JSONObject(String(error.networkResponse.data)).getString("message"), Toast.LENGTH_LONG).show()
                 } catch (e: Exception) {
                     Toast.makeText(activity, resources.getString(R.string.error_general), Toast.LENGTH_LONG).show()

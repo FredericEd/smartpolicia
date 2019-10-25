@@ -33,10 +33,11 @@ class ConsultaPreviaFragment: Fragment() {
         val datos: JsonObject = json.obj("consultas")!!.obj("especial")!!
         textNombre.text = "${datos["nombre1"]} ${datos["apellido1"]}"
         val alerta = datos.obj("tipo_alerta")!!
-        textAlerta.text = alerta.string("nombre")
-        textAlerta.setBackgroundColor(Color.parseColor("#${alerta["color"]}"))
+        //textAlerta.text = alerta.string("nombre")
+        //textAlerta.setBackgroundColor(Color.parseColor("#${alerta["color"]}"))
         if (datos.string("imagen")!!.isNotEmpty())
             Picasso.get().load(Utils.URL_MEDIA + datos.string("imagen")).error(R.drawable.men).placeholder(R.drawable.men).noFade().into(profilePicture)
+        profilePicture.setBorderColor(Color.parseColor("#${alerta["color"]}"))
         btnRecord.setOnClickListener{
             val fragment = ConsultaFragment()
             val bundle = Bundle()

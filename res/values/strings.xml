@@ -42,6 +42,7 @@
     <string name="profile_label_observacion">Observacion</string>
 
     <string name="alarma_label_title">Alarmas disponibles</string>
+    <string name="alarma_label_title2">Usuarios cercanos</string>
     <string name="alarma_button_aceptar">Responder</string>
     <string name="alarma_message_aceptar">¿Desea responder a esta alarma?</string>
     <string name="alarma_message_finalizar">¿Desea finalizar la alarma?</string>
@@ -50,6 +51,12 @@
     <string name="alarma_label_estado">Estado:</string>
     <string name="alarma_label_title_lista">Alarmas procesadas</string>
     <string name="alarma_label_empty">Aún no ha procesado ninguna alarma.</string>
+
+    <string name="especial_label_visto">Última vez visto:</string>
+    <string name="especial_label_visto2">Visto el:</string>
+    <string name="especial_label_alerta">Alerta:</string>
+    <string name="especial_label_title_map">Ubicación de la consulta</string>
+    <string name="especial_label_title_lista">Reportes de personas escaneadas</string>
 
     <string name="unknown_location">La ubicación no pudo obtenerse.</string>
     <string name="channel_name">ulocation</string>

@@ -104,7 +104,8 @@ class AlarmaFinalizarFragment: Fragment() {
                         val json: JsonObject = Parser.default().parse(StringBuilder(response)) as JsonObject
                         Toast.makeText(activity, json.string("message"), Toast.LENGTH_LONG).show()
                         prefs.edit().putString("alarma", "").apply()
-                        activity!!.onBackPressed()
+                        activity!!.finish()
+                        activity!!.startActivity(activity!!.intent)
                     } catch (e: Exception) {
                         progressView.visibility = View.GONE
                         contentView.visibility = View.VISIBLE

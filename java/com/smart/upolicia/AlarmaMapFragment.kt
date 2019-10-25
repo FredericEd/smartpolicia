@@ -109,12 +109,12 @@ class AlarmaMapFragment: Fragment(), OnMapReadyCallback {
 
     override fun onStart() {
         super.onStart()
-        if (isCurrent) (activity as MainActivity).requestLocationUpdates()
+        //if (isCurrent) (activity as MainActivity).requestLocationUpdates()
     }
 
     override fun onStop() {
         super.onStop()
-        if (isCurrent) (activity as MainActivity).removeLocationUpdates()
+        //if (isCurrent) (activity as MainActivity).removeLocationUpdates()
     }
 
     private fun getDeviceLocation() {

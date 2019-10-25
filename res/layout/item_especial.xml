@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -15,6 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
@@ -45,7 +47,7 @@
                     android:id="@+id/textNombre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorPrimary"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold" />
 
@@ -57,12 +59,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/alarma_label_fecha"
+                        android:text="@string/especial_label_visto"
+                        android:textColor="@color/colorPrimary"
                         android:textStyle="bold"
                         android:paddingRight="5dp"/>
 
                     <TextView
-                        android:id="@+id/textFecha"
+                        android:id="@+id/textVisto"
+                        android:textColor="@color/colorPrimary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -76,20 +80,38 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/alarma_label_estado"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/especial_label_alerta"
                         android:textStyle="bold"
                         android:paddingRight="5dp"/>
 
                     <TextView
-                        android:id="@+id/textEstado"
-                        android:textStyle="bold"
-                        android:textColor="@color/naranja"
+                        android:id="@+id/textAlerta"
+                        android:textColor="@color/colorPrimary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:id="@+id/imgMap"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:tint="@color/naranja"
+                    android:src="@drawable/ic_marker"
+                    card_view:srcCompat="@drawable/ic_marker" />
+
 
         </LinearLayout>
 

@@ -5,6 +5,7 @@
     <color name="colorAccent">#FFDC10</color>
     <color name="colorAccentDark">#887407</color>
     <color name="colorHint">#a4a4a4</color>
+    <color name="naranja">#FE640A</color>
 
     <color name="white">#FFF</color>
 </resources>

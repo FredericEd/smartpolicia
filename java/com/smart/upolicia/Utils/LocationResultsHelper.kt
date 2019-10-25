@@ -94,6 +94,7 @@ internal class LocationResultHelper(private val mContext: Context, private val m
                         locationResultText
             )
             .apply()
+        saveRegistro(mLocations[mLocations.lastIndex]!!.latitude.toString(), mLocations[mLocations.lastIndex]!!.longitude.toString())
     }
 
     /**
@@ -136,6 +137,38 @@ internal class LocationResultHelper(private val mContext: Context, private val m
         fun getSavedLocationResult(context: Context): String? {
             return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(KEY_LOCATION_UPDATES_RESULT, "")
+        }
+    }
+
+    private fun saveRegistro(latitud: String, longitud: String) {
+        if (NetworkUtils.isConnected(mContext)) {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
+            val queue = Volley.newRequestQueue(mContext)
+            var URL = "${Utils.URL_SERVER}/policias/location"
+            val stringRequest = object : StringRequest(Method.POST, URL, Response.Listener<String> { response ->
+                try {
+                    Log.wtf("respuesta", response)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }, Response.ErrorListener { error ->
+                error.printStackTrace()
+            }) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers.put("token", prefs.getString("api_key", "")!!)
+                    return headers
+                }
+
+                override fun getParams(): MutableMap<String, String> {
+                    val parameters = HashMap<String, String>()
+                    parameters["latitud"] = latitud
+                    parameters["longitud"] = longitud
+                    return parameters
+                }
+            }
+            stringRequest.retryPolicy = DefaultRetryPolicy(180000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+            queue.add(stringRequest)
         }
     }
 }
